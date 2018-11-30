@@ -4,11 +4,13 @@ const Schema = mongoose.Schema
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: [true, 'Name fields is required'],
+    required: [true, 'name fields is required'],
     unique: true
   },
   password: {
-    type: String
+    type: String,
+    required: [true, 'password fields is required'],
+    unique: true
   },
   created_at: {
     type: Date,

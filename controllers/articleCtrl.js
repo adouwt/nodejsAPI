@@ -9,8 +9,8 @@ const articleCtrl = {};
 // 获取全部用户信息
 articleCtrl.getAllArticle = (req, res, next) => {
     Article.find({})
-    .then(article => {
-        logger.info(`articleCtrl.getAllArticle${article}`)
+    .then(articles => {
+        logger.info(`articleCtrl.getAllArticle${articles}`)
         res.send(articles)
     })
     .catch(next =>{
@@ -116,7 +116,7 @@ articleCtrl.deleteSomeOneArticle = (req, res, next) => {
      
   })
     .catch(next =>{
-        logger.error(`articleCtrl.deleteSomeOneArticle-${id}----${next}`)
+            logger.error(`articleCtrl.deleteSomeOneArticle-${id}----${next}`)
     })      
 }
 

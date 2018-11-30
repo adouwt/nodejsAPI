@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const ArticleSchema = new Schema({
     title: {
         type: String,
-        required: [true, 'Name fields is required'],
+        required: [true, 'title fields is required'],
         unique: true
     },
     body: {

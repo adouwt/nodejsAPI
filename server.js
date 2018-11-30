@@ -22,9 +22,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev", { "stream": logger.stream }));
 
-// 挂在路由 /cars 是一级路由  转到 ./routes/cars.route 中来 里面的 /allcars 是子路由，完整的路由 /cars/allcars
-app.use('/getrouter', getRouter);
-app.use('/postrouter', postRouter);
+// 挂在路由 /get 是一级路由  转到 ./routes/* 中来 里面的 /* 是子路由，完整的路由 /get/*
+app.use('/get', getRouter);
+app.use('/post', postRouter);
 
 //Index route
 app.get('/', (req, res) => {

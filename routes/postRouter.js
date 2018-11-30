@@ -6,7 +6,7 @@ const postRouter = express.Router()
 // 注册
 postRouter.post('/register', (req, res) => {
     // console.log('-----router', req.query)
-    userCtrl.getSomeOne(req, res);
+    userCtrl.addSomeOne(req, res);
 });
 // 登陆
 postRouter.post('/login', (req, res) => {
@@ -23,14 +23,16 @@ postRouter.post('/updateoneuser', (req, res) => {
     // console.log('-----router', req.query)
     userCtrl.updateSomeOne(req, res);
 });
-
-// 文章
+// ----------------------------------------------------------
+// 文章增加
 postRouter.post('/addonearticle', (req, res) => {
     artilceCtrl.addArticle(req, res);
 });
+// 文章修改
 postRouter.post('/updateonearticle', (req, res) => {
     artilceCtrl.updateSomeOneArticle(req, res);
 });
+// 文章删除
 postRouter.post('/deleteonearticle', (req, res) => {
     artilceCtrl.deleteSomeOneArticle(req, res);
 });
