@@ -13,7 +13,7 @@ Starter project for creating a MVC express server, using
 Clone the repository and run `npm install`
 
 ```
-git clone https://github.com/tomyitav/express-es6-starter.git
+git clone https://github.com/adouwt/es6-loves.git
 npm install
 ```
 
@@ -39,8 +39,6 @@ After npm building the project, go to project root directory, open shell and run
 ```
 docker build -t express-es6-starter .
 ```
-
-Instructions about running the container are available [here](https://hub.docker.com/r/tomyitav/express-es6-starter/)
 
 ## Debugging with Webstorm
 
