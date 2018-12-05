@@ -20,7 +20,7 @@ userCtrl.getAllUser = (req, res, next) => {
 }
 // 获取单个信息
 userCtrl.getSomeOne = (req, res, next) => {
-    const id = req.query.id
+    const id = req.body.id
     User.findById({ _id: id }).then(user => {
         res.send(user)
     }).catch(next)
@@ -28,7 +28,9 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 获取单个用户，通过token, 和query，通过query查询其他用户
 userCtrl.getOne = (req, res, next) => {
-    const token = req.headers.accesstoken
+    console.log(req, 'req')
+    const token = req.headers.authorization;
+    console.log(token,'token')
     const decode = jwt.verify(token, 'erlinger')
     const name = decode.name
     User.findOne({ name: name })
@@ -40,11 +42,14 @@ userCtrl.getOne = (req, res, next) => {
 
 // 用户登录
 userCtrl.getSomeOne = (req, res, next) => {
-    const { userName, userPassword, type } = req.query
-    if (type === 'signin') {
-        User.findOne({ name: userName }).then(user => {
+    console.log(req.body)
+    const { username, password, type } = req.body
+    if (1) {
+        // if (type === 'signin') {
+        console.log(123)
+        User.findOne({ name: username }).then(user => {
             if (user != null) {
-                if (!bcrypt.compareSync(userPassword, user.password)) { // 如果密码错误，返回状态给前端
+                if (!bcrypt.compareSync(password, user.password)) { // 如果密码错误，返回状态给前端
                     res.send({
                         success: false,
                         message: '认证失败，密码错误'
@@ -76,28 +81,29 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
-    const { userName, userPassword, type } = req.query
-    if (!userName) {
+    console.log(req.body,'1111')
+    const { username, password, type } = req.body
+    if (!username) {
         res.send({
             success: false,
             message: '用户名不能为空',
         })
-        logger.error(`userCtrl.addSomeOne-userName is ${userName}`)
+        logger.error(`userCtrl.addSomeOne-username is ${username}`)
         return
     }
-    if (!userPassword) {
+    if (!password) {
         res.send({
             success: false,
             message: '密码为空',
         })
-        logger.error(`userCtrl.addSomeOne-userPassword is ${userPassword}`)
+        logger.error(`userCtrl.addSomeOne-password is ${password}`)
         return
     }
 
-    logger.info(`userCtrl.getSomeOne-${userName}-${userPassword}`)
+    logger.info(`userCtrl.getSomeOne-${username}-${password}`)
 
     if (type === 'signup') { // 注册
-        User.findOne({ name: userName }).count().then(count => {
+        User.findOne({ name: username }).count().then(count => {
             if (count > 0) {
                 logger.info(`userCtrl.getSomeOne-${type}`)
                 res.send({
@@ -107,9 +113,9 @@ userCtrl.addSomeOne = (req, res, next) => {
             } else {
                 // 密码加盐处理
                 const salt = bcrypt.genSaltSync(10)
-                const hash = bcrypt.hashSync(userPassword, salt)
+                const hash = bcrypt.hashSync(password, salt)
                 const userInfo = {
-                    name: userName,
+                    name: username,
                     password: hash,
                     avatar_url: 'http://i1.fuimg.com/605011/1f0138a7b101b0f1.jpg'
                 }
@@ -143,21 +149,21 @@ userCtrl.addSomeOne = (req, res, next) => {
 
 // 修改
 userCtrl.updateSomeOne = (req, res, next) => {
-    const { userName, id, updateType, userPassword } = req.query
-    if (!userName) {
+    const { username, id, updateType, password } = req.body
+    if (!username) {
         res.send({
             success: false,
             message: '用户名不能为空',
         })
-        logger.error(`userCtrl.addSomeOne-userName is ${userName}`)
+        logger.error(`userCtrl.addSomeOne-username is ${username}`)
         return
     }
-    if (!userPassword) {
+    if (!password) {
         res.send({
             success: false,
             message: '密码为空',
         })
-        logger.error(`userCtrl.addSomeOne-userPassword is ${userPassword}`)
+        logger.error(`userCtrl.addSomeOne-password is ${password}`)
         return
     }
     if (!updateType) {
@@ -165,13 +171,13 @@ userCtrl.updateSomeOne = (req, res, next) => {
             success: false,
             message: '类型为空',
         })
-        logger.error(`userCtrl.addSomeOne-userPassword is ${updateType}`)
+        logger.error(`userCtrl.addSomeOne-password is ${updateType}`)
         return
     }
     User.findById({ _id: id }).then(user => {
         if (user) {
-            if (updateType === 'userName') {
-                User.findByIdAndUpdate({ _id: id }, { $set: { name: userName } })
+            if (updateType === 'username') {
+                User.findByIdAndUpdate({ _id: id }, { $set: { name: username } })
                     .then(user => {
                         logger.info(`userCtrl.updateSomeOne-${updateType}--ok`)
                         User.findById({ _id: id }).then((user) => {
@@ -184,7 +190,7 @@ userCtrl.updateSomeOne = (req, res, next) => {
                     }).catch(next)
             } else if (updateType === 'password') {
                 // todo 验证原来密码
-                User.findByIdAndUpdate({ _id: id }, { $set: { password: userPassword } })
+                User.findByIdAndUpdate({ _id: id }, { $set: { password: password } })
                     .then(user => {
                         logger.info(`userCtrl.updateSomeOne-${id}-${updateType}--ok`)
                         User.findById({ _id: id }).then((user) => {
@@ -211,7 +217,7 @@ userCtrl.updateSomeOne = (req, res, next) => {
 
 // 删除一个用户
 userCtrl.deleteSomeOne = (req, res, next) => {
-    const id = req.query.id
+    const id = req.body.id
     console.log(id)
     if (!id) {
         res.send({

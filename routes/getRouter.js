@@ -7,6 +7,10 @@ const getRouter = express.Router()
 getRouter.get('/oneuser', (req, res) => {
     userCtrl.getSomeOne(req, res);
 });
+// 获取用户信息
+getRouter.get('/user/info', (req, res) => {
+    userCtrl.getOne(req, res);
+});
 // 获取所有user
 getRouter.get('/alluser', (req, res) => {
     userCtrl.getAllUser(req, res);
