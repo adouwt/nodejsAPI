@@ -28,28 +28,29 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 获取单个用户，通过token, 和query，通过query查询其他用户
 userCtrl.getOne = (req, res, next) => {
-    console.log(req, 'req')
-    const token = req.headers.authorization;
-    console.log(token,'token')
+    // console.log(req.headers, 'req --31')
+    const token = req.headers['w-token'];
     const decode = jwt.verify(token, 'erlinger')
     const name = decode.name
     User.findOne({ name: name })
         .then(user => {
-            res.send(user)
+            res.send({
+                success: true,
+                data: user
+            })
         })
         .catch(next)
 }
 
 // 用户登录
 userCtrl.getSomeOne = (req, res, next) => {
-    console.log(req.body)
-    const { username, password, type } = req.body
+    const { username, password, type } = req.body || req.query
     if (1) {
         // if (type === 'signin') {
-        console.log(123)
         User.findOne({ name: username }).then(user => {
             if (user != null) {
                 if (!bcrypt.compareSync(password, user.password)) { // 如果密码错误，返回状态给前端
+                    logger.info(`【${new Date().toLocaleString()}】-userCtrl.getSomeOne--53`)
                     res.send({
                         success: false,
                         message: '认证失败，密码错误'
@@ -63,6 +64,7 @@ userCtrl.getSomeOne = (req, res, next) => {
                     const secret = 'erlinger'
                     // 生成token,可以在加一个设置失效日期
                     const token = jwt.sign(userToken, secret)
+                    logger.info(`【${new Date().toLocaleString()}】-userCtrl.getSomeOne-登录成功--67`)
                     res.send({
                         success: true,
                         message: '登录成功',
@@ -70,6 +72,7 @@ userCtrl.getSomeOne = (req, res, next) => {
                     })
                 }
             } else {
+                logger.info(`【${new Date().toLocaleString()}】-userCtrl.getSomeOne-用户不存在 --75`)
                 res.send({
                     success: false,
                     message: '用户不存在'
@@ -81,23 +84,21 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
-    console.log(req.body,'1111')
-    const { username, password, type } = req.body
+    const { username, password, type, roles } = req.body || req.query
     if (!username) {
+        logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
+        console.log('用户名不能为空')
         res.send({
             success: false,
             message: '用户名不能为空',
         })
-        logger.error(`userCtrl.addSomeOne-username is ${username}`)
-        return
     }
     if (!password) {
+        logger.error(`userCtrl.addSomeOne-password is ${password}-- 密码为空--99`)
         res.send({
             success: false,
             message: '密码为空',
         })
-        logger.error(`userCtrl.addSomeOne-password is ${password}`)
-        return
     }
 
     logger.info(`userCtrl.getSomeOne-${username}-${password}`)
@@ -117,7 +118,8 @@ userCtrl.addSomeOne = (req, res, next) => {
                 const userInfo = {
                     name: username,
                     password: hash,
-                    avatar_url: 'http://i1.fuimg.com/605011/1f0138a7b101b0f1.jpg'
+                    avatar_url: 'http://i1.fuimg.com/605011/1f0138a7b101b0f1.jpg',
+                    roles: ['editor']
                 }
                 User.create(userInfo).then(user => {
                     const userToken = {
@@ -131,12 +133,13 @@ userCtrl.addSomeOne = (req, res, next) => {
                     res.send({
                         success: true,
                         message: '注册成功',
-                        token: token
+                        token: token,
+                        roles: ['editor']
                     })
                 })
             }
         }).catch(next => {
-            logger.error(`userCtrl.getSomeOne-${type}----${next}`)
+            logger.error(`userCtrl.getSomeOne-${type}----${next}--142`)
         })
     } else {
         res.send({
