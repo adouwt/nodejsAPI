@@ -84,7 +84,7 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
-    const { username, password, type, roles } = req.body || req.query
+    const { username, password, type, role } = req.body
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
         console.log('用户名不能为空')
@@ -119,7 +119,7 @@ userCtrl.addSomeOne = (req, res, next) => {
                     name: username,
                     password: hash,
                     avatar_url: 'http://i1.fuimg.com/605011/1f0138a7b101b0f1.jpg',
-                    roles: ['editor']
+                    role: role
                 }
                 User.create(userInfo).then(user => {
                     const userToken = {
@@ -134,7 +134,7 @@ userCtrl.addSomeOne = (req, res, next) => {
                         success: true,
                         message: '注册成功',
                         token: token,
-                        roles: ['editor']
+                        role: role
                     })
                 })
             }
