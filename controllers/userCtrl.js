@@ -255,4 +255,21 @@ userCtrl.deleteSomeOne = (req, res, next) => {
 
 }
 
+// 用户退出
+userCtrl.logout = (req, res, next) => {
+    const token = req.headers['w-token'];
+    const decode = jwt.verify(token, 'erlinger')
+    const name = decode.name
+    User.findOne({ name: name })
+        .then(user => {
+            logger.info(`userCtrl.logout-${name}--ok`)
+            res.send({
+                success: true,
+                data: '',
+                message: '退出成功'
+            })
+        })
+        .catch(next)
+
+}
 export default userCtrl;

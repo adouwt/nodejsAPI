@@ -23,6 +23,11 @@ postRouter.post('/updateoneuser', (req, res) => {
     // console.log('-----router', req.query)
     userCtrl.updateSomeOne(req, res);
 });
+// 推出登录
+postRouter.post('/logout', (req, res) => {
+    // console.log('-----router', req.query)
+    userCtrl.logout(req, res);
+});
 // ----------------------------------------------------------
 // 文章增加
 postRouter.post('/addonearticle', (req, res) => {
