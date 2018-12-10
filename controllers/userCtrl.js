@@ -68,8 +68,10 @@ userCtrl.getSomeOne = (req, res, next) => {
                     res.send({
                         success: true,
                         message: '登录成功',
-                        token: token
+                        token: token,
+                        user: user
                     })
+                    // res.send(user)
                 }
             } else {
                 logger.info(`【${new Date().toLocaleString()}】-userCtrl.getSomeOne-用户不存在 --75`)
@@ -84,7 +86,7 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
-    const { username, password, type, role } = req.body
+    const { username, password, type, role } = req.query
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
         console.log('用户名不能为空')
@@ -118,7 +120,7 @@ userCtrl.addSomeOne = (req, res, next) => {
                 const userInfo = {
                     name: username,
                     password: hash,
-                    avatar_url: 'http://i1.fuimg.com/605011/1f0138a7b101b0f1.jpg',
+                    avatar_url: 'http://www.imeitou.com/uploads/allimg/2018041608/jwzx4afoxf5.jpg',
                     role: role
                 }
                 User.create(userInfo).then(user => {
