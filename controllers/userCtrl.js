@@ -86,7 +86,7 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
-    const { username, password, type, role } = req.query
+    const { username, password, type, role } = req.body
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
         console.log('用户名不能为空')
