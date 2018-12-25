@@ -29,16 +29,15 @@ npm run startdb
 ```
 The server will run on port 3000. You can change this by editing `config.dev.js` file.
 
-## Run server in production with Docker
+## Run server in production with pm2
 
 ```
-npm run build
+1.npm run build
+2.package.json 放进dist,上传到服务器
+3.npm install
+4.pm2 start serve.js
 ```
-
-After npm building the project, go to project root directory, open shell and run:
-```
-docker build -t express-es6-starter .
-```
+### package.json 放进上面
 
 ## Debugging with Webstorm
 
