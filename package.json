@@ -1,5 +1,5 @@
 {
-  "name": "express-es6-starter",
+  "name": "express-es6-template",
   "version": "0.1.0",
   "description": "Seed project for easily getting started with express for es6",
   "scripts": {
@@ -20,7 +20,7 @@
     "Javascript",
     "Express"
   ],
-  "author": "Tom Yitav <tomyitav@gmail.com>",
+  "author": "erlinger <1259709654@qq.com>",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.15.2",
