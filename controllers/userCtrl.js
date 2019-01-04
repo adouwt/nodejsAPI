@@ -12,7 +12,11 @@ userCtrl.getAllUser = (req, res, next) => {
         .then(users => {
             logger.info(`userCtrl.getAllUser${users}`)
             // todo 只筛选部分信息，不包括密码 id 等敏感信息
-            res.send(users)
+            res.send({
+                success: true,
+                message: '获取成功',
+                users: users
+            })
         })
         .catch(next => {
             logger.error(`userCtrl.getAllUser${next}`)
