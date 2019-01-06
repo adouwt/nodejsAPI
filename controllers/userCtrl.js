@@ -156,7 +156,7 @@ userCtrl.addSomeOne = (req, res, next) => {
     }
 }
 
-// 修改
+// 用户修改昵称和密码
 userCtrl.updateSomeOne = (req, res, next) => {
     const { username, id, updateType, password } = req.body
     if (!username) {
@@ -257,6 +257,40 @@ userCtrl.deleteSomeOne = (req, res, next) => {
         }
     }).catch(next)
 
+}
+
+// 修改用户角色
+userCtrl.updateSomeOneRole = (req, res, next) => {
+    const { id, role } = req.body
+    if (!id) {
+        res.send({
+            success: false,
+            message: '未找到指定删除目标'
+        })
+    }
+    // TODO 用async 替换 先查id 在删id 的异步操作
+    User.findById({ _id: id }).then(user => {
+        if (user) {
+            User.findByIdAndUpdate({ _id: id }, { $set: { role: role } })
+                .then(user => {
+                    logger.info(`userCtrl.updateSomeOneRole-${id}-${role}--ok`)
+                    User.findById({ _id: id }).then((user) => {
+                        res.send({
+                            success: true,
+                            message: '修改成功',
+                            user: user
+                        })
+                    })
+                }).catch(next => {
+                    logger.error(`userCtrl.updateSomeOne-${id}-${updateType}----${next}`)
+                })
+        } else {
+            res.send({
+                success: false,
+                message: '未找到指定修改目标'
+            })
+        }
+    }).catch(next)
 }
 
 // 用户退出

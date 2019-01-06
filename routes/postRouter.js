@@ -18,11 +18,18 @@ postRouter.post('/deleteuser', (req, res) => {
     // console.log('-----router', req.query)
     userCtrl.deleteSomeOne(req, res);
 });
-// 修改用户
+// 修改用户密码昵称
 postRouter.post('/updateoneuser', (req, res) => {
     // console.log('-----router', req.query)
     userCtrl.updateSomeOne(req, res);
 });
+
+// 修改用户角色
+postRouter.post('/updatesomerole', (req, res) => {
+    // console.log('-----router', req.query)
+    userCtrl.updateSomeOneRole(req, res);
+});
+
 // 推出登录
 postRouter.post('/logout', (req, res) => {
     // console.log('-----router', req.query)
