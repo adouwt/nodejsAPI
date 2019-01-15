@@ -13,12 +13,13 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/adouwt/es6-loves"
   },
   "keywords": [
     "Node.js",
     "Javascript",
-    "Express"
+    "Express",
+    "ES6"
   ],
   "author": "erlinger <1259709654@qq.com>",
   "dependencies": {

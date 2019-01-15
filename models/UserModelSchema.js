@@ -21,7 +21,7 @@ const UserSchema = new Schema({
   email: String,
   followers: Number,
   following: Number,
-  role: String,
+  roles: Array,
   gender: String
 })
 

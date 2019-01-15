@@ -90,7 +90,7 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
-    const { username, password, type, role } = req.body
+    const { username, password, type, roles } = req.body
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
         console.log('用户名不能为空')
@@ -106,7 +106,7 @@ userCtrl.addSomeOne = (req, res, next) => {
             message: '密码为空',
         })
     }
-
+    console.log(roles, 'roles---------------------')
     logger.info(`userCtrl.getSomeOne-${username}-${password}`)
 
     if (type === 'signup') { // 注册
@@ -125,7 +125,7 @@ userCtrl.addSomeOne = (req, res, next) => {
                     name: username,
                     password: hash,
                     avatar_url: 'http://www.imeitou.com/uploads/allimg/2018041608/jwzx4afoxf5.jpg',
-                    role: role
+                    roles: roles
                 }
                 User.create(userInfo).then(user => {
                     const userToken = {
@@ -140,7 +140,7 @@ userCtrl.addSomeOne = (req, res, next) => {
                         success: true,
                         message: '注册成功',
                         token: token,
-                        role: role
+                        roles: roles
                     })
                 })
             }
@@ -261,7 +261,7 @@ userCtrl.deleteSomeOne = (req, res, next) => {
 
 // 修改用户角色
 userCtrl.updateSomeOneRole = (req, res, next) => {
-    const { id, role } = req.body
+    const { id, roles } = req.body
     if (!id) {
         res.send({
             success: false,
@@ -271,9 +271,9 @@ userCtrl.updateSomeOneRole = (req, res, next) => {
     // TODO 用async 替换 先查id 在删id 的异步操作
     User.findById({ _id: id }).then(user => {
         if (user) {
-            User.findByIdAndUpdate({ _id: id }, { $set: { role: role } })
+            User.findByIdAndUpdate({ _id: id }, { $set: { roles: roles } })
                 .then(user => {
-                    logger.info(`userCtrl.updateSomeOneRole-${id}-${role}--ok`)
+                    logger.info(`userCtrl.updateSomeOneRole-${id}-${roles}--ok`)
                     User.findById({ _id: id }).then((user) => {
                         res.send({
                             success: true,
@@ -282,7 +282,7 @@ userCtrl.updateSomeOneRole = (req, res, next) => {
                         })
                     })
                 }).catch(next => {
-                    logger.error(`userCtrl.updateSomeOne-${id}-${updateType}----${next}`)
+                    logger.error(`userCtrl.updateSomeOne-${id}----${next}`)
                 })
         } else {
             res.send({
