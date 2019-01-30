@@ -36,6 +36,7 @@ userCtrl.getOne = (req, res, next) => {
     const token = req.headers['w-token'];
     const decode = jwt.verify(token, 'erlinger')
     const name = decode.name
+    // todo 需要将users信息过滤下
     User.findOne({ name: name })
         .then(user => {
             res.send({
