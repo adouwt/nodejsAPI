@@ -1,6 +1,7 @@
 import express from "express";
 import userCtrl from "../controllers/userCtrl.js"
 import artilceCtrl from "../controllers/articleCtrl.js"
+import wexinUserCtrl from "../controllers/wexinUserCtrl.js"
 const postRouter = express.Router()
 
 // 注册
@@ -49,5 +50,8 @@ postRouter.post('/deleteonearticle', (req, res) => {
     artilceCtrl.deleteSomeOneArticle(req, res);
 });
 
-
+// 微信签到
+postRouter.post('/wexinSignIn', (req, res) => {
+    wexinUserCtrl.addOneUser(req, res)
+} )
 export default postRouter;
