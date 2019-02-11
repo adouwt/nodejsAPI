@@ -1,5 +1,6 @@
 import express from "express";
 import userCtrl from "../controllers/userCtrl.js"
+import weixinUserCtrl from "../controllers/wexinUserCtrl.js"
 import artilceCtrl from "../controllers/articleCtrl.js"
 const getRouter = express.Router()
 
@@ -24,5 +25,8 @@ getRouter.get('/allarticle', (req, res) => {
     artilceCtrl.getAllArticle(req, res);
 });
 
-
+//获取微信签到 all user
+getRouter.get('/wxalluser', (req, res) => {
+    weixinUserCtrl.getAllUser(req, res);
+});
 export default getRouter;
