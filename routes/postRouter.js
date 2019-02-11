@@ -53,5 +53,10 @@ postRouter.post('/deleteonearticle', (req, res) => {
 // 微信签到
 postRouter.post('/wexinSignIn', (req, res) => {
     wexinUserCtrl.addOneUser(req, res)
-} )
+})
+
+// 微信签到初始化
+postRouter.post('/wexinSignInInit', (req, res) => {
+    wexinUserCtrl.dataInit(req, res)
+})
 export default postRouter;

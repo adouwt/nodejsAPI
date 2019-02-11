@@ -22,12 +22,39 @@ wexinUserCtrl.getAllUser = (req, res, next) => {
             logger.error(`wexinUserCtrl.getAllUser${next}`)
         })
 }
-// 获取单个信息
-wexinUserCtrl.getSomeOne = (req, res, next) => {
-    const id = req.body.id
-    WexinUser.findById({ _id: id }).then(user => {
-        res.send(user)
-    }).catch(next)
+// 微信用户登陆初始化
+wexinUserCtrl.dataInit = (req, res, next) => {
+    const { nickName, avatarUrl } = req.body
+    console.log(req.body)
+    if (!nickName) {
+        logger.error(`wexinUserCtrl.addSomeOne-nickName is ${nickName} --91-用户名不能为空`)
+        console.log('用户名不能为空')
+        res.send({
+            success: false,
+            message: '用户名不能为空',
+        })
+    }
+    if (!avatarUrl) {
+        logger.error(`wexinUserCtrl.addSomeOne-avatar_url is ${avatarUrl}-- 密码为空--99`)
+        res.send({
+            success: false,
+            message: '密码为空',
+        })
+    }
+    logger.info(`wexinUserCtrl.getSomeOne-${nickName}-${avatarUrl}`)
+    // todo：通过ID 查找，替换name 查找
+    WexinUser.findOne({ name: nickName }).count().then(count => {
+        if (count > 0) {
+            logger.info(`wexinUserCtrl.getSomeOne-`)
+            res.send({
+                success: false,
+                isSignIn: true,
+                message: '已签到'
+            })
+        } 
+        }).catch(next => {
+            logger.error(`WexinUser.getSomeOne--${next}---142`)
+        })
 }
 
 
