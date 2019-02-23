@@ -46,4 +46,5 @@ Pass node parameters of --preset=babel-preset-es2015
 
 
 ## Todo
+### 部署方式过于麻烦，需简化操作，一键完成
 ### 如果需要一个接口演示 就在这里快速写一个演示接口

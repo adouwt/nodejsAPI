@@ -63,7 +63,8 @@ userCtrl.getSomeOne = (req, res, next) => {
                 } else { // 密码正确
                     const userToken = {
                         name: user.name,
-                        id: user._id
+                        id: user._id,
+                        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 12) // 过期时间为12个小时
                     }
                     // 密钥
                     const secret = 'erlinger'
@@ -135,7 +136,6 @@ userCtrl.addSomeOne = (req, res, next) => {
                     }
                     // 密钥
                     const secret = 'erlinger'
-                    // 生成token,可以在加一个设置失效日期
                     const token = jwt.sign(userToken, secret)
                     res.send({
                         success: true,
