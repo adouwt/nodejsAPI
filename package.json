@@ -3,17 +3,17 @@
   "version": "0.1.0",
   "description": "Seed project for easily getting started with express for es6",
   "scripts": {
-    "start": "nodemon ./server.js --exec babel-node",
+    "start": "nodemon ./nodeServer.js --exec babel-node",
     "startdb": "mongod --dbpath ./db/dbData",
     "build": "babel . -d dist --presets es2015,stage-2 --ignore spec.js,node_modules",
-    "serve": "node dist/server.js",
-    "start_babel": "babel-node ./server.js --preset=babel-preset-es2015",
+    "serve": "node dist/nodeServer.js",
+    "start_babel": "babel-node ./nodeServer.js --preset=babel-preset-es2015",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ."
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/adouwt/es6-loves"
+    "url": "https://github.com/adouwt/nodejsAPI.git"
   },
   "keywords": [
     "Node.js",
@@ -26,7 +26,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.15.2",
     "cors": "^2.8.0",
-    "express": "4.14.0",
+    "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.15.0",
     "mongoose": "^4.8.6",
@@ -35,7 +35,7 @@
     "winston-daily-rotate-file": "^1.4.6"
   },
   "devDependencies": {
-    "babel-cli": "6.16.0",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.17.0",
     "babel-eslint": "^7.0.0",
     "babel-plugin-inline-import": "^2.0.1",
