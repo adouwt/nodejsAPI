@@ -28,7 +28,7 @@ app.use("/post", postRouter)
 
 //Index route
 app.get("/", (req, res) => {
-  res.send("this is a index,服务已经开启！")
+  res.send("对不起您访问的路径不正确，请核对访问地址！")
 })
 
 app.listen(port, () => {

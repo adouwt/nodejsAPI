@@ -3,7 +3,7 @@ import User from '../models/UserModelSchema'
 import logger from '../core/logger/app-logger'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-
+import clientRedis from "../utils/redis"
 const userCtrl = {};
 
 // 获取全部用户信息
@@ -92,7 +92,13 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
-    const { username, password, type, roles } = req.body
+    let reqCode = ''
+    clientRedis.get("registerCode", (err, res) =>{
+        console.log(res); // code
+        reqCode = res;
+    })
+    const { username, password, type, roles , registerCode } = req.body
+
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
         console.log('用户名不能为空')
@@ -106,6 +112,13 @@ userCtrl.addSomeOne = (req, res, next) => {
         res.send({
             success: false,
             message: '密码为空',
+        })
+    }
+    if (reqCode !== registerCode) {
+        logger.error(`userCtrl.addSomeOne-username is --91-验证码不正确！`)
+        res.send({
+            success: false,
+            message: '验证码不正确',
         })
     }
     console.log(roles, 'roles---------------------')
