@@ -92,12 +92,18 @@ userCtrl.getSomeOne = (req, res, next) => {
 
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
-    let reqCode = ''
+    const { username, password, type, roles , registerCode } = req.body
+    // // async 处理异步
     clientRedis.get("registerCode", (err, res) =>{
         console.log(res); // code
-        reqCode = res;
+        if (res !== registerCode) {
+            logger.error(`userCtrl.registerCode is --118-验证码不正确！`)
+            res.send({
+                success: false,
+                message: '验证码不正确',
+            })
+        }
     })
-    const { username, password, type, roles , registerCode } = req.body
 
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
@@ -114,15 +120,29 @@ userCtrl.addSomeOne = (req, res, next) => {
             message: '密码为空',
         })
     }
-    if (reqCode !== registerCode) {
-        logger.error(`userCtrl.addSomeOne-username is --91-验证码不正确！`)
-        res.send({
-            success: false,
-            message: '验证码不正确',
-        })
-    }
+    // 有问题
+    // let getRegisterCode = async () => {
+    //     let code = await clientRedis.get("registerCode", (err, res) =>{
+    //         console.log(res); // code
+    //         return code
+    //     })
+    //     console.log(code, 'redis de return')
+    //     if (code !== registerCode) {
+    //         logger.error(`userCtrl.registerCode is --118-验证码不正确！`)
+    //         res.send({
+    //             success: false,
+    //             message: '验证码不正确',
+    //         })
+    //     }
+    // }
+
+    // getRegisterCode()
+
+
+
+
     console.log(roles, 'roles---------------------')
-    logger.info(`userCtrl.getSomeOne-${username}-${password}`)
+    logger.info(`userCtrl.registerCode-${registerCode}-=-=-=$`)
 
     if (type === 'signup') { // 注册
         User.findOne({ name: username }).count().then(count => {
