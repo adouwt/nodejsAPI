@@ -7,6 +7,8 @@ import config from "./core/config/config.dev"
 import { getRouter, postRouter } from "./routes/indexRouter.js"
 import connectToDb from "./db/connect"
 
+import connectRedis from "./db/redis"
+
 const port = config.serverPort
 logger.stream = {
   write: function(message, encoding) {
@@ -15,6 +17,7 @@ logger.stream = {
 }
 
 connectToDb()
+connectRedis()
 
 const app = express()
 app.use(cors())

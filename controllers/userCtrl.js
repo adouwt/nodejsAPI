@@ -3,7 +3,7 @@ import User from '../models/UserModelSchema'
 import logger from '../core/logger/app-logger'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
-import clientRedis from "../utils/redis"
+import clientRedis from "../db/redis"
 const userCtrl = {};
 
 // 获取全部用户信息

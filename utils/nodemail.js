@@ -2,19 +2,19 @@
 import nodemailer from 'nodemailer'
 
 let transporter = nodemailer.createTransport({
-    service: 'qq', // 运营商  qq邮箱 网易//
+    service: '163', // 运营商  qq邮箱 网易//
     port: 465,//该端口不行的情况下，将端口号改为587
-    secure: true,
+    secureConnection: true,
     auth: {
-        user:'lovexsk@qq.com', //用哪个邮箱进行发送就输入哪个邮箱号
-        pass: 'quuasmtmjevobbjf' // pop3 授权码
+        user:'wtodd202@163.com', //用哪个邮箱进行发送就输入哪个邮箱号
+        pass: 'wangyi123' // pop3 授权码
     }
 });
 let mail={
     transporter:transporter,
     send(mail,content,callback){
         let mailOptions = {
-            from: '"Fred Foo " <lovexsk@qq.com>',
+            from: '"==== " <wtodd202@163.com>',
             to: mail, //接收方邮箱
             subject: '欢迎注册 ', // 邮箱标题内容，可更改
             text: `${content}`, //发送的具体内容
