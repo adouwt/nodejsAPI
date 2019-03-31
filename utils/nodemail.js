@@ -14,11 +14,11 @@ let mail={
     transporter:transporter,
     send(mail,content,callback){
         let mailOptions = {
-            from: '"==== " <wtodd202@163.com>',
+            from: '"Vue Admin System" <wtodd202@163.com>',
             to: mail, //接收方邮箱
             subject: '欢迎注册 ', // 邮箱标题内容，可更改
             text: `${content}`, //发送的具体内容
-            html: `<div style="text-indent: 2em;">欢迎注册本系统，您的注册码为：<span style="color:red;">${content}</span>，有效期为5分钟</div>` // html body
+            html: `<div style="text-indent: 2em;">欢迎注册Vue Admin System，您的注册码为：<span style="color:red;">${content}</span>，有效期为5分钟</div>` // html body
         };
 
         //发送

@@ -93,17 +93,44 @@ userCtrl.getSomeOne = (req, res, next) => {
 // 注册
 userCtrl.addSomeOne = (req, res, next) => {
     const { username, password, type, roles , registerCode } = req.body
+    
+    // 遗留的问题： 要生成一个以时间戳命名的 redis 的key， 不然这个key 的value 会被覆盖，、
+    //        这个时间戳如何保存并被获取到？
     // // async 处理异步
-    clientRedis.get("registerCode", (err, res) =>{
-        console.log(res); // code
-        if (res !== registerCode) {
-            logger.error(`userCtrl.registerCode is --118-验证码不正确！`)
+    // clientRedis.get("registerCode", (err, res) =>{
+    //     console.log(res); // code
+    //     if (res !== registerCode) {
+    //         logger.error(`userCtrl.registerCode is --118-验证码不正确！`)
+    //         res.send({
+    //             success: false,
+    //             message: '验证码不正确',
+    //         })
+    //     }
+    // })
+
+
+    // 从这个例子上虽说代码量上多了点，但是 还是好 🐶
+    const codeAsync = () =>{
+        return new Promise(resolve => {
+            clientRedis.get("registerCode", (err, res) =>{
+                console.log(res); // code
+                resolve(res)
+            })
+        })
+    }
+    let getRegisterCode = ( async () => {
+        let code = await codeAsync();
+        if (code !== registerCode) {
+            logger.error(`userCtrl.registerCode is --124行-验证码不正确！`)
             res.send({
                 success: false,
                 message: '验证码不正确',
             })
         }
-    })
+    })()
+
+    // getRegisterCode()
+
 
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
@@ -120,23 +147,7 @@ userCtrl.addSomeOne = (req, res, next) => {
             message: '密码为空',
         })
     }
-    // 有问题
-    // let getRegisterCode = async () => {
-    //     let code = await clientRedis.get("registerCode", (err, res) =>{
-    //         console.log(res); // code
-    //         return code
-    //     })
-    //     console.log(code, 'redis de return')
-    //     if (code !== registerCode) {
-    //         logger.error(`userCtrl.registerCode is --118-验证码不正确！`)
-    //         res.send({
-    //             success: false,
-    //             message: '验证码不正确',
-    //         })
-    //     }
-    // }
-
-    // getRegisterCode()
+    
 
 
 
