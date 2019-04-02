@@ -118,7 +118,7 @@ userCtrl.addSomeOne = (req, res, next) => {
             })
         })
     }
-    let getRegisterCode = ( async () => {
+    let getRegisterCode = async () => {
         let code = await codeAsync();
         if (code !== registerCode) {
             logger.error(`userCtrl.registerCode is --124行-验证码不正确！`)
@@ -127,10 +127,9 @@ userCtrl.addSomeOne = (req, res, next) => {
                 message: '验证码不正确',
             })
         }
-    })()
-
-    // getRegisterCode()
-
+        return
+    }
+    getRegisterCode()
 
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)

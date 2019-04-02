@@ -24,6 +24,7 @@ let mail={
         //发送
         this.transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
+                console.log(error, 'error')
                 callback(-1);// 失败
             } else {
                 console.log('Message sent: %s', info.messageId);
