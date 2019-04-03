@@ -34,17 +34,32 @@ userCtrl.getSomeOne = (req, res, next) => {
 userCtrl.getOne = (req, res, next) => {
     // console.log(req.headers, 'req --31')
     const token = req.headers['w-token'];
-    const decode = jwt.verify(token, 'erlinger')
-    const name = decode.name
-    // todo 需要将users信息过滤下
-    User.findOne({ name: name })
-        .then(user => {
+    jwt.verify(token, 'erlinger', (err, decode) => {
+        if(err) {
+            console.log('err', err);
             res.send({
-                success: true,
-                data: user
+                success: false,
+                data: {
+                    "expired": true
+                }
             })
+            return
+        }
+        const name = decode.name
+        // todo 需要将users信息过滤下
+        User.findOne({ name: name })
+            .then(user => {
+                res.send({
+                    success: true,
+                    data: user
+                })
+            })
+            .catch(err => {
+                console.log(err)
+                next()
         })
-        .catch(next)
+    })
+    
 }
 
 // 用户登录
@@ -64,7 +79,7 @@ userCtrl.getSomeOne = (req, res, next) => {
                     const userToken = {
                         name: user.name,
                         id: user._id,
-                        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 12) // 过期时间为12个小时
+                        exp: Math.floor(Date.now() / 1000) + (30 * 1) // 过期时间为12个小时
                     }
                     // 密钥
                     const secret = 'erlinger'
