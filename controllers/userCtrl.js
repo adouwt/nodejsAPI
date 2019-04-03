@@ -79,7 +79,7 @@ userCtrl.getSomeOne = (req, res, next) => {
                     const userToken = {
                         name: user.name,
                         id: user._id,
-                        exp: Math.floor(Date.now() / 1000) + (30 * 1) // 过期时间为12个小时
+                        exp: Math.floor(Date.now() / 1000) + (60 * 60 * 12) // 过期时间为12个小时
                     }
                     // 密钥
                     const secret = 'erlinger'
