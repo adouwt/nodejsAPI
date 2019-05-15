@@ -8,8 +8,6 @@ const userCtrl = {};
 
 // 获取全部用户信息
 userCtrl.getAllUser = (req, res, next) => {
-    const { page } = req.body
-    console.log(page, '1234658977456456546')
     User.find({})
         .then(users => {
             logger.info(`userCtrl.get${11}`)
