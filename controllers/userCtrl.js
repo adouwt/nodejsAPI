@@ -28,8 +28,10 @@ userCtrl.getAllUserFromPage = async (req, res, next) => {
     let { page } = req.body
     let dataNumber = parseInt(page) * 5 || 5
     let maxSize = 1
+    let allDataLength = 1
     await User.find({}).then(user => {
         maxSize = Math.ceil(user.length / 5)
+        allDataLength = user.length
     })
     await User.find({})
         .limit(dataNumber)
@@ -44,7 +46,8 @@ userCtrl.getAllUserFromPage = async (req, res, next) => {
                 message: '获取成功',
                 users: users,
                 currentPageSize: page++,
-                maxSize: maxSize
+                maxSize: maxSize,
+                allDataLength: allDataLength
             })
         })
         .catch(next => {
