@@ -67,4 +67,10 @@ postRouter.post("/sendEmailCode", (req, res) => {
   emailServiceCtrl.resgisterCode(req, res)
 })
 
+// 分页获取用户数
+postRouter.post("/getUsersFromPage", (req, res) => {
+  userCtrl.getAllUserFromPage(req, res)
+})
+
+
 export default postRouter

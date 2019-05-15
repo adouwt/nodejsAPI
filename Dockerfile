@@ -7,6 +7,6 @@ ADD node_modules /software/express-server/dist/node_modules
 
 WORKDIR /software/express-server/dist
 
-CMD ["node", "server.js"]
+CMD ["pm2", "nodeServer.js"]
 
-MAINTAINER tomyitav@gmail.com
+MAINTAINER wtodd202@163.com

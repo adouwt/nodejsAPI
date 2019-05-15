@@ -8,9 +8,11 @@ const userCtrl = {};
 
 // 获取全部用户信息
 userCtrl.getAllUser = (req, res, next) => {
+    const { page } = req.body
+    console.log(page, '1234658977456456546')
     User.find({})
         .then(users => {
-            logger.info(`userCtrl.getAllUser${users}`)
+            logger.info(`userCtrl.get${11}`)
             // todo 只筛选部分信息，不包括密码 id 等敏感信息
             res.send({
                 success: true,
@@ -22,6 +24,28 @@ userCtrl.getAllUser = (req, res, next) => {
             logger.error(`userCtrl.getAllUser${next}`)
         })
 }
+
+// 分页获取全部用户信息
+userCtrl.getAllUserFromPage = (req, res, next) => {
+    const { page } = req.body
+    let dataNumber = parseInt(page) * 5 || 5
+    User.find({})
+        .limit(dataNumber)
+        .then(users => {
+            logger.info(`getAllUserFromPage.get${11}`)
+            // todo 只筛选部分信息，不包括密码 id 等敏感信息
+            res.send({
+                success: true,
+                message: '获取成功',
+                users: users
+            })
+        })
+        .catch(next => {
+            logger.error(`getAllUserFromPage.getAllUser${next}`)
+        })
+}
+
+
 // 获取单个信息
 userCtrl.getSomeOne = (req, res, next) => {
     const id = req.body.id
