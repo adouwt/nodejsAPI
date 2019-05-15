@@ -24,18 +24,27 @@ userCtrl.getAllUser = (req, res, next) => {
 }
 
 // 分页获取全部用户信息
-userCtrl.getAllUserFromPage = (req, res, next) => {
-    const { page } = req.body
+userCtrl.getAllUserFromPage = async (req, res, next) => {
+    let { page } = req.body
     let dataNumber = parseInt(page) * 5 || 5
-    User.find({})
+    let maxSize = 1
+    await User.find({}).then(user => {
+        maxSize = Math.ceil(user.length / 5)
+    })
+    await User.find({})
         .limit(dataNumber)
         .then(users => {
             logger.info(`getAllUserFromPage.get${11}`)
             // todo 只筛选部分信息，不包括密码 id 等敏感信息
+            if(page>=maxSize) {
+                page = maxSize
+            }
             res.send({
                 success: true,
                 message: '获取成功',
-                users: users
+                users: users,
+                currentPageSize: page++,
+                maxSize: maxSize
             })
         })
         .catch(next => {
