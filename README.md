@@ -1,4 +1,4 @@
-# express-es6-starter
+# express-es6 api
 
 Starter project for creating a MVC express server, using
 
@@ -13,7 +13,7 @@ Starter project for creating a MVC express server, using
 Clone the repository and run `npm install`
 
 ```
-git clone https://github.com/adouwt/es6-loves.git
+git clone https://github.com/adouwt/nodejsAPI.git
 npm install
 ```
 
@@ -25,25 +25,23 @@ npm start
 ## Starting the dataBase
 
 ```
-npm run startdb
+npm run startdb (如果没有对应文件，新建一个存放数据的文件)
 ```
-The server will run on port 3000. You can change this by editing `config.dev.js` file.
+The server will run on port 4000. You can change this by editing `core/config/config.dev.js` file.
 
 ## Run server in production with pm2
 
 ```
 1.npm run build
-2.package.json 放进dist,上传到服务器
+2.将项目中的 package.json 放进dist,上传到服务器
 3.npm install
 4.pm2 start serve.js
 ```
-### package.json 放进上面
-
-## Debugging with Webstorm
-
-Set babel-node executable as the node interpreter.
-Pass node parameters of --preset=babel-preset-es2015
-
+##### or
+```
+1、sh build.sh
+2、pm2 start serve.js
+```
 
 ## Todo
 ### 部署方式过于麻烦，需简化操作，一键完成
