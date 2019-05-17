@@ -25,7 +25,7 @@ userCtrl.getAllUser = (req, res, next) => {
 
 // 分页获取全部用户信息
 userCtrl.getAllUserFromPage = async (req, res, next) => {
-    let { page } = req.body
+    let { page, skip } = req.body
     let dataNumber = parseInt(page) * 5 || 5
     let maxSize = 1
     let allDataLength = 1
@@ -33,26 +33,51 @@ userCtrl.getAllUserFromPage = async (req, res, next) => {
         maxSize = Math.ceil(user.length / 5)
         allDataLength = user.length
     })
-    await User.find({})
-        .limit(dataNumber)
-        .then(users => {
-            logger.info(`getAllUserFromPage.get${11}`)
-            // todo 只筛选部分信息，不包括密码 id 等敏感信息
-            if(page>=maxSize) {
-                page = maxSize
-            }
-            res.send({
-                success: true,
-                message: '获取成功',
-                users: users,
-                currentPageSize: page++,
-                maxSize: maxSize,
-                allDataLength: allDataLength
+    if(!skip) {
+        await User.find({})
+            .limit(dataNumber)
+            .then(users => {
+                logger.info(`getAllUserFromPage.get${11}`)
+                // todo 只筛选部分信息，不包括密码 id 等敏感信息
+                if(page>=maxSize) {
+                    page = maxSize
+                }
+                res.send({
+                    success: true,
+                    message: '获取成功',
+                    users: users,
+                    currentPageSize: page++,
+                    maxSize: maxSize,
+                    allDataLength: allDataLength
+                })
             })
-        })
-        .catch(next => {
-            logger.error(`getAllUserFromPage.getAllUser${next}`)
-        })
+            .catch(next => {
+                logger.error(`getAllUserFromPage.getAllUser${next}`)
+            })
+    } else {
+        await User.find({})
+            .skip(dataNumber - 5)
+            .limit(5)
+            .then(users => {
+                logger.info(`getAllUserFromPage.get${11}`)
+                // todo 只筛选部分信息，不包括密码 id 等敏感信息
+                if(page>=maxSize) {
+                    page = maxSize
+                }
+                res.send({
+                    success: true,
+                    message: '获取成功',
+                    users: users,
+                    currentPageSize: page++,
+                    maxSize: maxSize,
+                    allDataLength: allDataLength
+                })
+            })
+            .catch(next => {
+                logger.error(`getAllUserFromPage.getAllUser${next}`)
+            })
+    }
+    
 }
 
 
