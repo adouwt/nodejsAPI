@@ -9,6 +9,7 @@ const userCtrl = {};
 // 获取全部用户信息
 userCtrl.getAllUser = (req, res, next) => {
     User.find({})
+        .sort({'_id': -1})
         .then(users => {
             logger.info(`userCtrl.get${11}`)
             // todo 只筛选部分信息，不包括密码 id 等敏感信息
@@ -36,6 +37,7 @@ userCtrl.getAllUserFromPage = async (req, res, next) => {
     if(!skip) {
         await User.find({})
             .limit(dataNumber)
+            .sort({'_id': -1})
             .then(users => {
                 logger.info(`getAllUserFromPage.get${11}`)
                 // todo 只筛选部分信息，不包括密码 id 等敏感信息
@@ -58,6 +60,7 @@ userCtrl.getAllUserFromPage = async (req, res, next) => {
         await User.find({})
             .skip(dataNumber - 5)
             .limit(5)
+            .sort({'_id': -1})
             .then(users => {
                 logger.info(`getAllUserFromPage.get${11}`)
                 // todo 只筛选部分信息，不包括密码 id 等敏感信息
