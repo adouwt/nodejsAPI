@@ -278,7 +278,7 @@ userCtrl.addSomeOne = (req, res, next) => {
 
 // 管理员添加用户
 userCtrl.adminAddSomeOne = (req, res, next) => {
-    const { username, password, roles } = req.body 
+    const { username, password, roles, age } = req.body 
 
     if (!username) {
         logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
@@ -314,7 +314,8 @@ userCtrl.adminAddSomeOne = (req, res, next) => {
                 password: hash,
                 avatar_url: 'http://3999n.rzlt.net/d/file/96kaifa/201812220822/0e627f8a5b.jpg',
                 roles: roles,
-                regsiterTime: (new Date()).toLocaleString()
+                regsiterTime: (new Date()).toLocaleString(),
+                age: age
             }
             // console.log((new Date()).toLocaleString(), '11111111111111111111111111111111111')
             User.create(userInfo).then(user => {

@@ -23,6 +23,7 @@ const UserSchema = new Schema({
     default: (new Date()).toLocaleString()
   },
   avatar_url: String,
+  age: String,
   email: String,
   followers: Number,
   following: Number,
