@@ -223,10 +223,6 @@ userCtrl.addSomeOne = (req, res, next) => {
             message: '密码为空',
         })
     }
-    
-
-
-
 
     console.log(roles, 'roles---------------------')
     logger.info(`userCtrl.registerCode-${registerCode}-=-=-=$`)
@@ -246,10 +242,11 @@ userCtrl.addSomeOne = (req, res, next) => {
                 const userInfo = {
                     name: username,
                     password: hash,
-                    avatar_url: 'http://www.imeitou.com/uploads/allimg/2018041608/jwzx4afoxf5.jpg',
+                    avatar_url: 'http://3999n.rzlt.net/d/file/96kaifa/201812220822/0e627f8a5b.jpg',
                     roles: roles,
-                    regsiterTime: new Date()
+                    regsiterTime: (new Date()).toLocaleString()
                 }
+                // console.log((new Date()).toLocaleString(), '11111111111111111111111111111111111')
                 User.create(userInfo).then(user => {
                     const userToken = {
                         name: user.name,
@@ -262,7 +259,8 @@ userCtrl.addSomeOne = (req, res, next) => {
                         success: true,
                         message: '注册成功',
                         token: token,
-                        roles: roles
+                        roles: roles,
+                        regsiterTime: (new Date()).toLocaleString()
                     })
                 })
             }
@@ -276,6 +274,73 @@ userCtrl.addSomeOne = (req, res, next) => {
         })
         logger.error(`userCtrl.addSomeOne-${type}`)
     }
+}
+
+// 管理员添加用户
+userCtrl.adminAddSomeOne = (req, res, next) => {
+    const { username, password, roles } = req.body 
+
+    if (!username) {
+        logger.error(`userCtrl.addSomeOne-username is ${username} --91-用户名不能为空`)
+        console.log('用户名不能为空')
+        res.send({
+            success: false,
+            message: '用户名不能为空',
+        })
+    }
+    if (!password) {
+        logger.error(`userCtrl.addSomeOne-password is ${password}-- 密码为空--99`)
+        res.send({
+            success: false,
+            message: '密码为空',
+        })
+    }
+
+    console.log(roles, 'roles---------------------')
+
+    User.findOne({ name: username }).count().then(count => {
+        if (count > 0) {
+            logger.info(`userCtrl.getSomeOne`)
+            res.send({
+                success: false,
+                message: '用户名已存在'
+            })
+        } else {
+            // 密码加盐处理
+            const salt = bcrypt.genSaltSync(10)
+            const hash = bcrypt.hashSync(password, salt)
+            const userInfo = {
+                name: username,
+                password: hash,
+                avatar_url: 'http://3999n.rzlt.net/d/file/96kaifa/201812220822/0e627f8a5b.jpg',
+                roles: roles,
+                regsiterTime: (new Date()).toLocaleString()
+            }
+            // console.log((new Date()).toLocaleString(), '11111111111111111111111111111111111')
+            User.create(userInfo).then(user => {
+                const userToken = {
+                    name: user.name,
+                    id: user._id
+                }
+                // 密钥
+                const secret = 'erlinger'
+                const token = jwt.sign(userToken, secret)
+                res.send({
+                    success: true,
+                    message: '注册成功',
+                    token: token,
+                    roles: roles,
+                    regsiterTime: (new Date()).toLocaleString()
+                })
+            })
+        }
+    }).catch(next => {
+        res.send({
+            success: false,
+            message: `添加用户失败`
+        })
+        logger.error(`userCtrl.getSomeOne-----${next}--142`)
+    })
 }
 
 // 用户修改昵称和密码

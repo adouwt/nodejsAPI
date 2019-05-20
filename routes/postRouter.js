@@ -11,6 +11,11 @@ postRouter.post("/register", (req, res) => {
   // console.log('-----router', req.query)
   userCtrl.addSomeOne(req, res)
 })
+// 管理员添加用户
+postRouter.post("/adminRegister", (req, res) => {
+  // console.log('-----router', req.query)
+  userCtrl.adminAddSomeOne(req, res)
+})
 // 登陆
 postRouter.post("/login", (req, res) => {
   // console.log('-----router', req.query)
