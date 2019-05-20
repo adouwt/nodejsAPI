@@ -244,7 +244,8 @@ userCtrl.addSomeOne = (req, res, next) => {
                     name: username,
                     password: hash,
                     avatar_url: 'http://www.imeitou.com/uploads/allimg/2018041608/jwzx4afoxf5.jpg',
-                    roles: roles
+                    roles: roles,
+                    regsiterTime: new Date()
                 }
                 User.create(userInfo).then(user => {
                     const userToken = {
