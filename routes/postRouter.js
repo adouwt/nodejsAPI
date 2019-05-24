@@ -21,6 +21,13 @@ postRouter.post("/login", (req, res) => {
   // console.log('-----router', req.query)
   userCtrl.getSomeOne(req, res)
 })
+
+// 获取单个用户信息
+postRouter.post("/oneUser", (req, res) => {
+  // console.log('-----router', req.query)
+  userCtrl.getOneUser(req, res)
+})
+
 // 删除用户
 postRouter.post("/deleteuser", (req, res) => {
   // console.log('-----router', req.query)

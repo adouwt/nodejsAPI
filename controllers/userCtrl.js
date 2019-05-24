@@ -85,9 +85,11 @@ userCtrl.getAllUserFromPage = async (req, res, next) => {
 
 
 // 获取单个信息
-userCtrl.getSomeOne = (req, res, next) => {
+userCtrl.getOneUser = (req, res, next) => {
     const id = req.body.id
+    console.log(id)
     User.findById({ _id: id }).then(user => {
+        console.log('user-----------------------------------', user)
         res.send(user)
     }).catch(next)
 }
