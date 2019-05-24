@@ -40,7 +40,8 @@ The server will run on port 4000. You can change this by editing `core/config/co
 ##### or
 ```
 1、sh build.sh
-2、pm2 start serve.js
+2、解压dist.zip npm install
+3、pm2 start serve.js
 ```
 
 ## Todo
