@@ -17,7 +17,13 @@ const UserSchema = new Schema({
     required: true,
     default: Date.now()
   },
+  regsiterTime: {
+    type: String,
+    required: true,
+    default: (new Date()).toLocaleString()
+  },
   avatar_url: String,
+  age: String,
   email: String,
   followers: Number,
   following: Number,
