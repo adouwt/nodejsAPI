@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <span class="username"></span>
+        <p class="content"></p>
+    </div>
+    <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.dev.js"></script>
+    <script>
+        var socket = io.connect('18.10.1.115:3000');
+
+        //传输文本内容
+        socket.emit("chats",{
+            "contents" : '我是哨兵asasdasdasdsa',
+            "user": '哨兵1'
+        });
+
+		socket.on("chats",function (msg) {
+			document.querySelector('.username').innerHTML = msg.user
+			document.querySelector('.content').innerHTML = msg.contents
+		})
+    </script>
+</body>
+</html>

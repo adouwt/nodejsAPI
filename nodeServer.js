@@ -34,6 +34,13 @@ app.get("/", (req, res) => {
   res.send("对不起您访问的路径不正确，请核对访问地址！")
 })
 
+app.get('/chat', function(req, res){
+  res.sendFile(__dirname + '/chat.html');
+});
+
+
+
+
 app.listen(port, () => {
   logger.info("server started - ", port)
   logger.info("项目已经启动：", `http://localhost:${port}`)
