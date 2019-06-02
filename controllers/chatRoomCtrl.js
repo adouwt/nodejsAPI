@@ -1,44 +1,12 @@
+// controller 里面导入 model ，调用model 的方法，查询数据库
+import ChatRoomSchema from '../models/ChatRoomModelSchema'
+import logger from '../core/logger/app-logger'
+import jwt from 'jsonwebtoken'
 import express from "express"
-import bodyParser from "body-parser"
-import cors from "cors"
-import logger from "./core/logger/app-logger"
-import morgan from "morgan"
-import config from "./core/config/config.dev"
-import { getRouter, postRouter } from "./routes/indexRouter.js"
-import connectToDb from "./db/connect"
 
-import connectRedis from "./db/redis"
-
-const port = config.serverPort
-logger.stream = {
-  write: function(message, encoding) {
-    logger.info(message)
-  }
-}
-
-connectToDb()
-connectRedis()
-
-const app = express()
-app.use(cors())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(morgan("dev", { stream: logger.stream }))
-
-// 挂在路由 /get 是一级路由  转到 ./routes/* 中来 里面的 /* 是子路由，完整的路由 /get/*
-app.use("/get", getRouter)
-app.use("/post", postRouter)
-
-//Index route
-app.get("/", (req, res) => {
-  res.send("对不起您访问的路径不正确，请核对访问地址！")
-})
-
-app.get('/chat', function(req, res){
-  res.sendFile(__dirname + '/chat.html');
-});
 
 // 为socket.io 准备一个服务
+const app = express()
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
@@ -61,9 +29,31 @@ io.on('connection', function(socket){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
+const ChatRoomCtrl = {};
+
+// 进入聊天室
+ChatRoomCtrl.getRoomMsg = (req, res, next) => {
+    const { roomId, friendName } = req.body
+    
+    ChatRoomSchema.find({roomId: roomId})
+        .then(roomMsg => {
+            logger.info(`ChatRoomCtrl.ChatRoomCtrl${roomMsg}`)
+            // todo 只筛选部分信息，不包括密码 id 等敏感信息
+            res.send({
+                success: true,
+                message: '获取成功',
+                roomMsg: roomMsg
+            })
+        })
+        .catch(next => {
+            logger.error(`ChatRoomCtrl.ChatRoomCtrl${next}`)
+        })
+}
 
 
-app.listen(port, () => {
-  logger.info("server started - ", port)
-  logger.info("项目已经启动：", `http://localhost:${port}`)
-})
+// 离开聊天室
+ChatRoomCtrl.leaveRoom = (req, res, next) => {
+    
+}
+
+export default ChatRoomCtrl;

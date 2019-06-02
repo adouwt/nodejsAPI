@@ -7,13 +7,14 @@
     <title>Document</title>
 </head>
 <body>
+    <h3>title</h3>
     <div>
         <span class="username"></span>
         <p class="content"></p>
     </div>
     <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.dev.js"></script>
     <script>
-        var socket = io.connect('18.10.1.115:3000');
+        var socket = io.connect('http://localhost:3000');
 
         //传输文本内容
         socket.emit("chats",{
