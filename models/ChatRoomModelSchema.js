@@ -7,17 +7,10 @@ const ChatRoomSchema = new Schema({
         required: [true, 'roomId fields is required'],
         unique: true
     },
-    header: {
-        type: String
-    },
     created_at: {
-        type: Date,
+        type: String,
         required: true,
-        default: Date.now().toLocaleString()
-    },
-    msgArr: {
-        type: Array,
-        required: true
+        default: new Date().toLocaleString()
     }
 })
 
