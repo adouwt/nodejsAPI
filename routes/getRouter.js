@@ -9,6 +9,9 @@ getRouter.get('/oneuser', (req, res) => {
     userCtrl.getSomeOne(req, res);
 });
 // 获取用户信息
+getRouter.post('/user/info', (req, res) => {
+    userCtrl.getOne(req, res);
+});
 getRouter.get('/user/info', (req, res) => {
     userCtrl.getOne(req, res);
 });

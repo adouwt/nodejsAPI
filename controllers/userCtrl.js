@@ -244,7 +244,7 @@ userCtrl.addSomeOne = (req, res, next) => {
                 const userInfo = {
                     name: username,
                     password: hash,
-                    avatar_url: 'http://3999n.rzlt.net/d/file/96kaifa/201812220822/0e627f8a5b.jpg',
+                    avatar_url: 'http://pic16.nipic.com/20110821/2619077_142423513144_2.jpg',
                     roles: roles,
                     regsiterTime: (new Date()).toLocaleString()
                 }
@@ -314,7 +314,7 @@ userCtrl.adminAddSomeOne = (req, res, next) => {
             const userInfo = {
                 name: username,
                 password: hash,
-                avatar_url: 'http://3999n.rzlt.net/d/file/96kaifa/201812220822/0e627f8a5b.jpg',
+                avatar_url: 'http://pic16.nipic.com/20110821/2619077_142423513144_2.jpg',
                 roles: roles,
                 regsiterTime: (new Date()).toLocaleString(),
                 age: age
