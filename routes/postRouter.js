@@ -3,6 +3,7 @@ import userCtrl from "../controllers/userCtrl.js"
 import artilceCtrl from "../controllers/articleCtrl.js"
 import wexinUserCtrl from "../controllers/wexinUserCtrl.js"
 import chatRoomCtrl from "../controllers/chatRoomCtrl"
+import chatRoomSingleCtrl from "../controllers/chatRoomSingle"
 
 import emailServiceCtrl from "../controllers/emailServiceCtrl.js"
 const postRouter = express.Router()
@@ -86,9 +87,13 @@ postRouter.post("/getUsersFromPage", (req, res) => {
 })
 
 // 聊天室信息
+postRouter.post("/getRoomAllMsg", (req, res) => {
+  chatRoomCtrl.getRoomAllMsg(req, res)
+})
 
+// 单个聊天
 postRouter.post("/getRoomMsg", (req, res) => {
-  chatRoomCtrl.getRoomMsg(req, res)
+  chatRoomSingleCtrl.getRoomMsg(req, res)
 })
 
 export default postRouter

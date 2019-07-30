@@ -2,18 +2,17 @@
 import ChatRoomSchema from '../models/ChatRoomModelSchema'
 import logger from '../core/logger/app-logger'
 import io from './websocketIo'
-const ChatRoomCtrl = {};
+const chatRoomSingleCtrl = {};
 // 进入聊天室
-io.on('connection', function(socket){
-    socket.on('erlingerFamily', function (msg) {
-        //把接受到的信息在返回到页面中去 （广播）
-        console.log(msg, '12hang')
-        io.emit('erlingerFamily', msg);
+chatRoomSingleCtrl.getRoomMsg = (req, res, next) => {
+    const { roomId, friendName } = req.body
+    io.on('connection', function(socket){
+        socket.on(roomId, function (msg) {
+            //把接受到的信息在返回到页面中去 （广播）
+            console.log(msg, '12hang')
+            io.emit(roomId, msg);
+        })
     })
-})
-
-ChatRoomCtrl.getRoomAllMsg = (req, res, next) => {
-    const { roomId } = req.body
     // 初始化数据
     ChatRoomSchema.findOne({ roomId: roomId})
     .then(ChatRoomMsg => {
@@ -42,7 +41,7 @@ ChatRoomCtrl.getRoomAllMsg = (req, res, next) => {
 
 
 
-export default ChatRoomCtrl;
+export default chatRoomSingleCtrl;
 
 
 // io.on('connection', function(socket){
