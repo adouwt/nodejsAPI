@@ -18,13 +18,13 @@ ChatRoomCtrl.getRoomAllMsg = (req, res, next) => {
     ChatRoomSchema.findOne({ roomId: roomId})
     .then(ChatRoomMsg => {
         if (ChatRoomMsg) {
-            console.log(ChatRoomMsg, '20hang')
+            // console.log(ChatRoomMsg, '20hang')
             res.send({
                 success: true,
                 msgData: ChatRoomMsg
             })
         } else {
-            console.log('ChatRoomMsg 26hang')
+            // console.log('ChatRoomMsg 26hang')
             ChatRoomSchema.insertMany({
                 roomId: roomId,
                 friendName: friendName
@@ -39,8 +39,37 @@ ChatRoomCtrl.getRoomAllMsg = (req, res, next) => {
     }).catch(next)
 }
 
-
-
+ChatRoomCtrl.saveChatRoomMsg = (req, res, next) => {
+    const { roomId, currentMsg } = req.body;
+    // console.log(roomId, 'roomId');
+    // console.log(currentMsg, 'currentMsg');
+    if(!roomId) {
+        logger.error('没有找到对应的聊天室房间编号');
+        return
+    }
+    // 初始化数据
+    ChatRoomSchema.update(
+        { roomId: roomId}, 
+        {
+            $push:{
+                allChatContents: currentMsg
+            }
+        },
+        (err) => {
+            if(err) {
+                logger.error(`ChatRoomCtrl.saveChatRoomMsg-----${next}--60`)
+                res.send({
+                    success: false,
+                    msgData: '信息保存失败'
+                })
+            }
+            res.send({
+                success: true,
+                msgData: '信息保存成功'
+            })
+        }
+    )
+}
 
 export default ChatRoomCtrl;
 

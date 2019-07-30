@@ -11,7 +11,8 @@ const ChatRoomSchema = new Schema({
         type: String,
         required: true,
         default: new Date().toLocaleString()
-    }
+    },
+    allChatContents: Array,
 })
 
 const ChatRoom = mongoose.model('ChatRoom', ChatRoomSchema)

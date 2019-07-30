@@ -90,6 +90,10 @@ postRouter.post("/getUsersFromPage", (req, res) => {
 postRouter.post("/getRoomAllMsg", (req, res) => {
   chatRoomCtrl.getRoomAllMsg(req, res)
 })
+// 保存聊天内容
+postRouter.post("/saveChatRoomMsg", (req, res) => {
+  chatRoomCtrl.saveChatRoomMsg(req, res)
+})
 
 // 单个聊天
 postRouter.post("/getRoomMsg", (req, res) => {
