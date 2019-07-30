@@ -71,6 +71,52 @@ ChatRoomCtrl.saveChatRoomMsg = (req, res, next) => {
     )
 }
 
+ChatRoomCtrl.generateCommomRoom = (req, res, next) => {
+    // 先进来用房间名字字段查找，如果找到 返回房间名字的 id 集合
+    // 如果没有找到生成一个该名字的 集合
+    const { roomName } = req.body;
+    ChatRoomSchema.findOne({ roomName: roomName})
+    .then(response => {
+        console.log(response, '80hang')
+        if(response) {
+            res.send(
+                {
+                    success: true,
+                    data: {
+                        roomId: response._id
+                    }
+                }
+            )
+        } else {
+            ChatRoomSchema.create({roomName: roomName})
+            .then(response => {
+                res.send(
+                    {
+                        success: true,
+                        data: {
+                            roomId: response._id
+                        }
+                    }
+                )
+            })
+        }
+    }).catch( err => {
+        console.log(err, '104hang')
+        ChatRoomSchema.create({roomName: roomName})
+        .then(response => {
+            res.send(
+                {
+                    success: true,
+                    data: {
+                        roomId: response._id
+                    }
+                }
+            )
+        })
+    })
+    
+}
+
 export default ChatRoomCtrl;
 
 

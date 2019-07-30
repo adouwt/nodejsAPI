@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const ChatRoomSchema = new Schema({
     roomId: {
         type: String,
-        required: [true, 'roomId fields is required'],
+        // required: [true, 'roomId fields is required'],
         unique: true
     },
     created_at: {
@@ -13,6 +13,7 @@ const ChatRoomSchema = new Schema({
         default: new Date().toLocaleString()
     },
     allChatContents: Array,
+    roomName: String
 })
 
 const ChatRoom = mongoose.model('ChatRoom', ChatRoomSchema)

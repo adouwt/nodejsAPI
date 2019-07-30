@@ -95,6 +95,12 @@ postRouter.post("/saveChatRoomMsg", (req, res) => {
   chatRoomCtrl.saveChatRoomMsg(req, res)
 })
 
+// 生成公共聊天室
+
+postRouter.post("/generateCommomRoom", (req, res) => {
+  chatRoomCtrl.generateCommomRoom(req, res)
+})
+
 // 单个聊天
 postRouter.post("/getRoomMsg", (req, res) => {
   chatRoomSingleCtrl.getRoomMsg(req, res)
