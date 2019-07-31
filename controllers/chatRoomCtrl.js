@@ -15,26 +15,15 @@ io.on('connection', function(socket){
 ChatRoomCtrl.getRoomAllMsg = (req, res, next) => {
     const { roomId } = req.body
     // 初始化数据
-    ChatRoomSchema.findOne({ roomId: roomId})
+    ChatRoomSchema.findOne({ _id: roomId})
     .then(ChatRoomMsg => {
         if (ChatRoomMsg) {
-            // console.log(ChatRoomMsg, '20hang')
             res.send({
                 success: true,
                 msgData: ChatRoomMsg
             })
         } else {
-            // console.log('ChatRoomMsg 26hang')
-            ChatRoomSchema.insertMany({
-                roomId: roomId,
-                friendName: friendName
-            })
-            .then( res => {
-                console.log(res, '32hang')
-            })
-            .catch(err => {
-                console.log(err)
-            })
+            logger.error('没有找到对应的聊天室房间编号');
         }
     }).catch(next)
 }
@@ -49,7 +38,7 @@ ChatRoomCtrl.saveChatRoomMsg = (req, res, next) => {
     }
     // 初始化数据
     ChatRoomSchema.update(
-        { roomId: roomId}, 
+        { _id: roomId}, 
         {
             $push:{
                 allChatContents: currentMsg
@@ -77,7 +66,7 @@ ChatRoomCtrl.generateCommomRoom = (req, res, next) => {
     const { roomName } = req.body;
     ChatRoomSchema.findOne({ roomName: roomName})
     .then(response => {
-        console.log(response, '80hang')
+        // console.log(response, '80hang')
         if(response) {
             res.send(
                 {
@@ -101,7 +90,7 @@ ChatRoomCtrl.generateCommomRoom = (req, res, next) => {
             })
         }
     }).catch( err => {
-        console.log(err, '104hang')
+        // console.log(err, '104hang')
         ChatRoomSchema.create({roomName: roomName})
         .then(response => {
             res.send(
