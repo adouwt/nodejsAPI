@@ -86,24 +86,33 @@ postRouter.post("/getUsersFromPage", (req, res) => {
   userCtrl.getAllUserFromPage(req, res)
 })
 
-// 聊天室信息
+// 公共聊天室信息
 postRouter.post("/getRoomAllMsg", (req, res) => {
   chatRoomCtrl.getRoomAllMsg(req, res)
 })
-// 保存聊天内容
+// 保存公共聊天内容
 postRouter.post("/saveChatRoomMsg", (req, res) => {
   chatRoomCtrl.saveChatRoomMsg(req, res)
 })
 
 // 生成公共聊天室
-
 postRouter.post("/generateCommomRoom", (req, res) => {
   chatRoomCtrl.generateCommomRoom(req, res)
 })
 
-// 单个聊天
-postRouter.post("/getRoomMsg", (req, res) => {
-  chatRoomSingleCtrl.getRoomMsg(req, res)
+// 获取1-1聊天室 内容
+postRouter.post("/getSingleRoomMsg", (req, res) => {
+  chatRoomSingleCtrl.getSingleRoomMsg(req, res)
+})
+
+// 获取1-1聊天室的房间ID
+
+postRouter.post("/getSingleRoomId", (req, res) => {
+  chatRoomSingleCtrl.getRoomId(req, res);
+})
+// 保存单个聊天内容
+postRouter.post("/saveChatRoomSingleMsg", (req, res) => {
+  chatRoomSingleCtrl.saveChatRoomSingleMsg(req, res)
 })
 
 export default postRouter

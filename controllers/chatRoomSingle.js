@@ -2,82 +2,134 @@
 import ChatRoomSchema from '../models/ChatRoomModelSchema'
 import logger from '../core/logger/app-logger'
 import io from './websocketIo'
+
 const chatRoomSingleCtrl = {};
-// 进入聊天室
-chatRoomSingleCtrl.getRoomMsg = (req, res, next) => {
-    const { roomId, friendName } = req.body
-    io.on('connection', function(socket){
-        socket.on(roomId, function (msg) {
-            //把接受到的信息在返回到页面中去 （广播）
-            console.log(msg, '12hang')
-            io.emit(roomId, msg);
-        })
+var usocket = {},user = [];
+
+io.on('connection', function(socket){
+    console.log('new roomId');
+    socket.on('new roomId', (roomId) => {
+        console.log(roomId, 'roomId');
+		if(!(roomId in usocket)) {
+			socket.roomId = roomId;
+			usocket[roomId] = socket;
+			user.push(roomId);
+			socket.emit('login',user);
+			socket.emit('user joined',roomId,(user.length-1));
+			console.log(user, 'wefwefewfewfewfw00000');
+		}
     })
+    socket.on('send private message', function(res){
+        console.log(res, 'dddddddd');
+        usocket[res.roomId].emit('receive private message', res);
+		// if(res.roomId in usocket) {
+		// 	// usocket[res.roomId].emit('receive private message', res);
+		// }
+	});
+})
+
+io.on('disconnect', function(){
+    console.log(`人 离开聊天室了！`);
+});
+
+// 获取建立连接的 roomId
+chatRoomSingleCtrl.getRoomId = (req, res, next) => {
+    const { roomId, friendName } = req.body   
+    return roomId
+}
+
+// 进入聊天室
+chatRoomSingleCtrl.getSingleRoomMsg = (req, res, next) => {
+    const { roomId } = req.body
     // 初始化数据
+    console.log(roomId, 'getSingleRoomMsg')
     ChatRoomSchema.findOne({ roomId: roomId})
     .then(ChatRoomMsg => {
         if (ChatRoomMsg) {
-            console.log(ChatRoomMsg, '20hang')
             res.send({
                 success: true,
                 msgData: ChatRoomMsg
             })
         } else {
-            console.log('ChatRoomMsg 26hang')
-            ChatRoomSchema.insertMany({
-                roomId: roomId,
-                friendName: friendName
-            })
-            .then( res => {
-                console.log(res, '32hang')
-            })
-            .catch(err => {
-                console.log(err)
+            res.send({
+                success: true,
+                data: {
+                    'msg': '暂时没有查到内容'
+                }
             })
         }
     }).catch(next)
 }
 
+chatRoomSingleCtrl.saveChatRoomSingleMsg = (req, res, next) => {
+    const { roomId, currentMsg } = req.body;
+    if(!roomId) {
+        logger.error('roomId 不允许为空');
+        res.send({
+            success: false,
+            msg: 'roomId 不能为空'
+        })
+    }
+
+    ChatRoomSchema.findOne({ roomId: roomId})
+    .then( response => {
+        if(!response) {
+            ChatRoomSchema.create({roomId: roomId})
+            .then( Response => {
+                if(Response){
+                    console.log('创建成功')
+                    ChatRoomSchema.update(
+                        { roomId: roomId}, 
+                        {
+                            $push:{
+                                allChatContents: currentMsg
+                            }
+                        },
+                        (err) => {
+                            if(err) {
+                                logger.error(`ChatRoomCtrl.saveChatRoomSingleMsg-----${next}--60`)
+                                res.send({
+                                    success: false,
+                                    msgData: '信息保存失败'
+                                })
+                            }
+                            res.send({
+                                success: true,
+                                msgData: '信息保存成功'
+                            })
+                        }
+                    )
+                }
+            })
+        } else {
+            // 保存数据 入库
+            ChatRoomSchema.update(
+                { roomId: roomId}, 
+                {
+                    $push:{
+                        allChatContents: currentMsg
+                    }
+                },
+                (err) => {
+                    if(err) {
+                        logger.error(`ChatRoomCtrl.saveChatRoomSingleMsg-----${next}--60`)
+                        res.send({
+                            success: false,
+                            msgData: '信息保存失败'
+                        })
+                    }
+                    res.send({
+                        success: true,
+                        msgData: '信息保存成功'
+                    })
+                }
+            )
+        }
+    })
+
+    
+}
 
 
 
 export default chatRoomSingleCtrl;
-
-
-// io.on('connection', function(socket){
-//     console.log(friendName + ' ----connected =====11h 行');
-//     // chats 服务端和客户端要一致，作为一个聊天房间，如何一致，前端告知和某个用户连接，然后传递给后端?
-//     // 我 和 我的好友只要发起聊天，数据库存在一条聊天室id,之后不管谁先发起聊天，都是这个聊天室，进入聊天室可以获取
-//     // 历史信息，信息保存7（）天，删除该聊天室id;聊天室id = 我id + 好友id(或者好友id+我id) ，将聊天内容保存进mongo(后期用redis 缓存信息时间为两分钟)
-//     // 区分你 我， 进入聊天室传递ID  聊天室id = 我id + 好友id   根据前面的一个id,设置 isMe 字段为 true
-//     socket.on(roomId, function (msg) {
-//         //把接受到的信息在返回到页面中去 （广播）
-//         console.log(msg)
-//         io.emit(roomId, msg);
-
-//         // // 信息入库
-//         // ChatRoomSchema.insertOne({ roomId: roomId })
-//         // // .update(
-//         // //     { roomId: roomId }, 
-//         // //     { $push: { msgArr: msg } }
-//         // // )
-//         // .then(msg => {
-//         //     console.log('聊天信息入库成功')
-//         //     res.send({
-//         //         success: true,
-//         //         message: '聊天信息入库成功',
-//         //     })
-//         // })
-//         // .catch(next => {
-//         //     console.log('聊天信息入库失败')
-//         //     res.send({
-//         //         success: false,
-//         //         message: `聊天信息入库失败`
-//         //     })
-//         //     logger.error(`ChatRoomCtrl.getRoomMsg-----${next}--42`)
-//         // })
-//     });
-//     socket.on('disconnect', function(){
-//         console.log(`${friendName}离开聊天室了！`);
-//     });
-// });    
