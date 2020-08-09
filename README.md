@@ -33,7 +33,7 @@ The server will run on port 4000. You can change this by editing `core/config/co
 
 ```
 1.npm run build
-2.将项目中的 package.json 放进dist,上传到服务器
+2.将项目中dist 文件,上传到服务器
 3.npm install
 4.pm2 start serve.js
 ```

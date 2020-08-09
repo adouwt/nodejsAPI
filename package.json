@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon ./nodeServer.js --exec babel-node",
     "startdb": "mongod --dbpath ./db/dbData",
-    "build": "babel . -d dist --presets es2015,stage-2 --ignore spec.js,node_modules",
+    "build": "babel . -d dist --presets es2015,stage-2 --ignore spec.js,node_modules && cp ./package.json ./dist",
     "serve": "node dist/nodeServer.js",
     "start_babel": "babel-node ./nodeServer.js --preset=babel-preset-es2015",
     "test": "echo \"Error: no test specified\" && exit 1",
