@@ -1,6 +1,6 @@
 # express-es6 api
 
-Starter project for creating a MVC express server, using
+MVC express 的服务，用了如下技术
 
 + express
 + mongoose
