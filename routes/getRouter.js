@@ -32,4 +32,9 @@ getRouter.get('/allarticle', (req, res) => {
 getRouter.get('/wxalluser', (req, res) => {
     weixinUserCtrl.getAllUser(req, res);
 });
+
+// 获取所有user-连表计算rate
+getRouter.get('/alluserandrate', (req, res) => {
+    userCtrl.getAllUserAndRateCount(req, res);
+});
 export default getRouter;

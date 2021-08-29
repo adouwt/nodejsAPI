@@ -1,9 +1,11 @@
 // controller 里面导入 model ，调用model 的方法，查询数据库
 import User from '../models/UserModelSchema'
+import Rate from '../models/RateModelSchema'
 import logger from '../core/logger/app-logger'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import clientRedis from "../db/redis"
+import { countRate } from  '../utils/normalUtils'
 const userCtrl = {};
 
 // 获取全部用户信息
@@ -501,22 +503,55 @@ userCtrl.updateSomeOneRate = (req, res, next) => {
             message: '未找到指定目标'
         })
     }
-    // TODO 用async 替换 先查id 在删id 的异步操作
     User.findById({ _id: id }).then(user => {
         if (user) {
-            User.findByIdAndUpdate({ _id: id }, { $set: { rate: rate } })
-                .then(user => {
-                    logger.info(`userCtrl.updateSomeOneRole-${id}-${rate}--ok`)
-                    User.findById({ _id: id }).then((user) => {
+            const userInfo = {
+                userId: id,
+            }
+            // 先查找 userId 的表是否存在
+            // 是 update
+            Rate.findOne({
+                userId: id
+            }).count().then((count) => {
+                if(count > 0) {
+                    Rate.update({ userId: id }, {
+                        $push: {
+                            "rateList": {
+                                rateTime: (new Date()).toLocaleString(),
+                                rate: rate
+                            }
+                        },
+                    }).then((rateItem) => {
                         res.send({
                             success: true,
-                            message: '评分成功',
-                            user: user
+                            message: '评分成功'
                         })
+                    }).catch(next => {
+                        logger.error(`userCtrl.updateSomeOneRate-${id}----${next}`)
                     })
-                }).catch(next => {
-                    logger.error(`userCtrl.updateSomeOne-${id}----${next}`)
-                })
+                } else {
+                    // 否 insert 表数据
+                    Rate.create(userInfo).then(user => {
+                        console.log(user, 'rate-user')
+                        Rate.update({ userId: id }, {
+                            $push: {
+                                "rateList": {
+                                    rateTime: (new Date()).toLocaleString(),
+                                    rate: rate
+                                }
+                            },
+                        }).then((rateItem) => {
+                            res.send({
+                                success: true,
+                                message: '评分成功'
+                            })
+                        })
+                    }).catch(next => {
+                            logger.error(`userCtrl.updateSomeOne-${id}----${next}`)
+                    })
+                }
+            })
+            
         } else {
             res.send({
                 success: false,
@@ -526,7 +561,46 @@ userCtrl.updateSomeOneRate = (req, res, next) => {
     }).catch(next)
 }
 
-
+// 获取全部用户(计算rates 标准关联的 rate信息)
+userCtrl.getAllUserAndRateCount = (req, res, next) => {
+    User.find({})
+        .sort({'_id': -1})
+        .then( async (users) => {
+            logger.info(`userCtrl.getAllUserAndRateCount${11}`);
+            let rateArr = []
+            for(let i = 0; i < users.length; i++) {
+                await Rate.findOne({userId: users[i]._id}).then((rateUser) => {
+                    rateArr.push({
+                        _id: users[i]._id,
+                        name: users[i].name,
+                        avatar_url: users[i].avatar_url,
+                        regsiterTime: users[i].regsiterTime,
+                        price: users[i].price,
+                        user_desc: users[i].user_desc,
+                        rate: rateUser.rateList
+                    })
+                })
+            }
+            let newUserList = [...rateArr];
+            let userListTmp = []
+            let rateCount = 0;
+            for(let j = 0; j < newUserList.length; j++) {
+                for(let k = 0; k < newUserList[j].rate.length; k++) {
+                    rateCount += newUserList[j].rate[k].rate
+                }
+                userListTmp.push({...newUserList[j], rate: countRate((rateCount/ newUserList[j].rate.length).toFixed(2))})
+            }
+            res.send({
+                success: true,
+                message: '获取成功',
+                // users: [...rateArr],
+                users : userListTmp
+            })
+        })
+        .catch(next => {
+            logger.error(`userCtrl.getAllUser${next}`)
+        })
+}
 
 // 用户退出
 userCtrl.logout = (req, res, next) => {
