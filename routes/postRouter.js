@@ -115,4 +115,11 @@ postRouter.post("/saveChatRoomSingleMsg", (req, res) => {
   chatRoomSingleCtrl.saveChatRoomSingleMsg(req, res)
 })
 
+
+// 评分数
+postRouter.post("/oneUserRate", (req, res) => {
+  userCtrl.updateSomeOneRate(req, res)
+})
+
+
 export default postRouter

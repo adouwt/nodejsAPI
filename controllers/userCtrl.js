@@ -492,6 +492,42 @@ userCtrl.updateSomeOneRole = (req, res, next) => {
     }).catch(next)
 }
 
+// 修改用户rate
+userCtrl.updateSomeOneRate = (req, res, next) => {
+    const { id, rate } = req.body
+    if (!id) {
+        res.send({
+            success: false,
+            message: '未找到指定目标'
+        })
+    }
+    // TODO 用async 替换 先查id 在删id 的异步操作
+    User.findById({ _id: id }).then(user => {
+        if (user) {
+            User.findByIdAndUpdate({ _id: id }, { $set: { rate: rate } })
+                .then(user => {
+                    logger.info(`userCtrl.updateSomeOneRole-${id}-${rate}--ok`)
+                    User.findById({ _id: id }).then((user) => {
+                        res.send({
+                            success: true,
+                            message: '评分成功',
+                            user: user
+                        })
+                    })
+                }).catch(next => {
+                    logger.error(`userCtrl.updateSomeOne-${id}----${next}`)
+                })
+        } else {
+            res.send({
+                success: false,
+                message: '未找到指定修改目标'
+            })
+        }
+    }).catch(next)
+}
+
+
+
 // 用户退出
 userCtrl.logout = (req, res, next) => {
     const token = req.headers['w-token'];

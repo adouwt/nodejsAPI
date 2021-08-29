@@ -28,7 +28,10 @@ const UserSchema = new Schema({
   followers: Number,
   following: Number,
   roles: Array,
-  gender: String
+  gender: String,
+  rate: Number,
+  price: String,
+  user_desc: String,
 })
 
 const User = mongoose.model('User', UserSchema)
