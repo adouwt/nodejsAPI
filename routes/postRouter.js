@@ -6,6 +6,9 @@ import chatRoomCtrl from "../controllers/chatRoomCtrl"
 import chatRoomSingleCtrl from "../controllers/chatRoomSingle"
 
 import emailServiceCtrl from "../controllers/emailServiceCtrl.js"
+
+import uploadCtrl from "../controllers/uoloadCtrl.js"
+
 const postRouter = express.Router()
 
 // 注册
@@ -121,5 +124,13 @@ postRouter.post("/oneUserRate", (req, res) => {
   userCtrl.updateSomeOneRate(req, res)
 })
 
+// 上传
+postRouter.post("/uploadChunkFiles", (req, res) => {
+  uploadCtrl.uploadChunksFile(req, res)
+})
+
+postRouter.post("/mergeChunk", (req, res) => {
+  uploadCtrl.mergeFilesChunk(req, res)
+})
 
 export default postRouter
